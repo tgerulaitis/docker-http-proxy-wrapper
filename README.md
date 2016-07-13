@@ -4,7 +4,7 @@ docker-http-proxy is a wrapper script to make it easy to start and manage the me
 
 ## Installation
 
-    curl https://raw.githubusercontent.com/tgerulaitis/docker-nginx-proxy-wrapper/master/docker-http-proxy -k -o docker-nginx-proxy
+    curl https://raw.githubusercontent.com/tgerulaitis/docker-http-proxy-wrapper/master/docker-http-proxy -k -o docker-nginx-proxy
     chmod +x docker-nginx-proxy
 
 ## Usage
