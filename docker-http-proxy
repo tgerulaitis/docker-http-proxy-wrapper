@@ -27,6 +27,7 @@ script=${0##*/}
 command=$1
 
 name="http-proxy"
+image_name="codekitchen/dinghy-http-proxy"
 certs_dir=$HOME/.docker/ssl
 status=$(docker inspect --format "{{ .State.Running }}" $name 2> /dev/null)
 
@@ -75,8 +76,9 @@ start)
                 -p 443:443 \
                 -v $certs_dir:/etc/nginx/certs \
                 -v /var/run/docker.sock:/tmp/docker.sock \
+		-e CONTAINER_NAME=$name \
                 --name $name \
-                meanbee/nginx-proxy
+                $image_name
             ;;
     esac
     ;;
