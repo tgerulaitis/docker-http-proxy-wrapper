@@ -23,6 +23,10 @@
 # SOFTWARE.
 #
 
+########################################
+# Variables
+########################################
+
 script=${0##*/}
 command=$1
 
@@ -30,6 +34,40 @@ name="http-proxy"
 image_name="codekitchen/dinghy-http-proxy"
 certs_dir=$HOME/.docker/ssl
 status=$(docker inspect --format "{{ .State.Running }}" $name 2> /dev/null)
+
+color_reset="\033[0m"
+color_positive="\033[32m"
+color_negative="\033[31m"
+color_neutral="\033[33m"
+
+########################################
+# Functions
+########################################
+
+# Print an informational message
+function info {
+    echo -e "${color_reset}$@"
+}
+
+# Print a success message
+function success {
+    echo -e "${color_positive}$@${color_reset}"
+}
+
+# Print an error message
+function error {
+    echo -e "${color_negative}$@${color_reset}" >&2
+}
+
+# Print an error message and exit
+function fail {
+    echo -e "${color_negative}$@${color_reset}" >&2
+    exit 1
+}
+
+########################################
+# Usage
+########################################
 
 usage="\
 Usage:
@@ -61,15 +99,19 @@ Author:
     t.gerulaitis@gmail.com
 "
 
+########################################
+# Main
+########################################
+
 case "$command" in
 start)
     case "$status" in
         true)
-            echo "Proxy container is already running!"
-            exit 1
+            fail "Proxy container is already running!"
             ;;
         false)
-            docker start $name
+            docker start $name \
+            && success "Proxy container started"
             ;;
         *)
             docker run -d \
@@ -80,24 +122,24 @@ start)
                 -e CONTAINER_NAME=$name \
                 --restart always \
                 --name $name \
-                $image_name
+                $image_name \
+            && success "Proxy container created"
             ;;
     esac
     ;;
 stop)
     if [ "$status" == "true" ]; then
-        docker stop $name
+        docker stop $name \
+        &&  success "Proxy container stopped"
     else
-        echo "Proxy container is not running!"
-        exit 1
+        fail "Proxy container is not running!"
     fi
     ;;
 rm)
     if [ -n "$status" ]; then
         docker rm -v $name
     else
-        echo "Nothing to remove!"
-        exit 1
+        fail "Nothing to remove!"
     fi
     ;;
 name)
@@ -106,13 +148,13 @@ name)
 status)
     case "$status" in
         true)
-            echo "Proxy container is running"
+            info "Proxy container is running"
             ;;
         false)
-            echo "Proxy container is stopped"
+            info "Proxy container is stopped"
             ;;
         *)
-            echo "Proxy container has not been setup"
+            info "Proxy container has not been setup"
             ;;
     esac
     ;;
@@ -120,13 +162,11 @@ config)
     if [ "$status" == "true" ]; then
         docker exec $name cat /etc/nginx/conf.d/default.conf
     else
-        echo "Proxy inactive!"
-        exit 1
+        fail "Proxy inactive!"
     fi
     ;;
 *)
-    echo -e "$usage"
-    exit 1
+    fail "$usage"
     ;;
 esac
 
