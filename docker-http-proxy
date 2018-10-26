@@ -38,6 +38,7 @@ Usage:
 Available commands:
     name     Print out the name of the HTTP proxy container.
     status   Print out the status of the HTTP proxy container.
+    config   Print out the current Nginx configuration.
     start    Start the HTTP proxy container, creating it if necessary.
     stop     Stop the HTTP proxy container.
     rm       Destroy a stopped HTTP proxy container, including its volumes.
@@ -114,6 +115,14 @@ status)
             echo "Proxy container has not been setup"
             ;;
     esac
+    ;;
+config)
+    if [ "$status" == "true" ]; then
+        docker exec $name cat /etc/nginx/conf.d/default.conf
+    else
+        echo "Proxy inactive!"
+        exit 1
+    fi
     ;;
 *)
     echo -e "$usage"
