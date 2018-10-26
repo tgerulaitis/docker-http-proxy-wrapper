@@ -76,7 +76,8 @@ start)
                 -p 443:443 \
                 -v $certs_dir:/etc/nginx/certs \
                 -v /var/run/docker.sock:/tmp/docker.sock \
-		-e CONTAINER_NAME=$name \
+                -e CONTAINER_NAME=$name \
+                --restart always \
                 --name $name \
                 $image_name
             ;;
