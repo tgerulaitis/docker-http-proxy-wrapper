@@ -44,16 +44,16 @@ Available commands:
     rm       Destroy a stopped HTTP proxy container, including its volumes.
 
 Description:
-    $script is a wrapper to easily manage the meanbee/nginx-proxy docker
-    container. The container itself (extended from jwilder/nginx-proxy)
-    accepts incomming HTTP and HTTPS requests and passes them to the
-    appropriate docker container based on the request Host header.
+    $script is a wrapper to easily manage an Nginx proxy container. The
+    container, running $image_name, accepts incoming HTTP and HTTPS requests
+    and passes them to the appropriate docker container based on the request
+    Host header and the VIRTUAL_HOST container environment variable.
 
     For HTTPS requests, the container uses an appropriate SSL certificate
     mounted from $certs_dir.
 
     For more information on the docker HTTP proxy container, see
-    https://github.com/meanbee/docker-nginx-proxy and https://github.com/jwilder/nginx-proxy
+    https://github.com/jwilder/nginx-proxy
 
 Author:
     Tomas Gerulaitis
