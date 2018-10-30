@@ -14,6 +14,7 @@ docker-http-proxy is a wrapper script to make it easy to start and manage the me
     Available commands:
         name     Print out the name of the HTTP proxy container.
         status   Print out the status of the HTTP proxy container.
+        config   Print out the current Nginx configuration.
         start    Start the HTTP proxy container, creating it if necessary.
         stop     Stop the HTTP proxy container.
         rm       Destroy a stopped HTTP proxy container, including its volumes.
